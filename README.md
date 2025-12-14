@@ -1272,7 +1272,7 @@ with defaulting and derivation rules such as:
 $$
 {\mathrm{source}}_{\mathrm{test}} =
 \begin{cases}
-\mathrm{explicit\_test\_source} & \mathrm{if\ provided} \\
+\mathrm{explicit}_{\mathrm{test\_source}} & \mathrm{if\ provided} \\
 \mathrm{derive(source)} & \mathrm{otherwise}
 \end{cases}
 $$
