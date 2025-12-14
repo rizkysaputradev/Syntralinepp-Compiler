@@ -1270,10 +1270,10 @@ $$
 with defaulting and derivation rules such as:
 
 $$
-\text{source}_{test} =
+{\mathrm{source}}_{\mathrm{test}} =
 \begin{cases}
-\text{explicit test\_source} & \text{if provided} \\
-\text{derive(source)} & \text{otherwise}
+\mathrm{explicit\_test\_source} & \mathrm{if\ provided} \\
+\mathrm{derive(source)} & \mathrm{otherwise}
 \end{cases}
 $$
 
@@ -1296,11 +1296,11 @@ where:
 After normalization, architecture families are **collapsed**:
 
 $$
-\text{normalize}(arch) =
+\mathrm{normalize}(arch) =
 \begin{cases}
-\text{cnn} & \text{if } arch \in \{\text{cnn\_small}, \text{cnn\_deep}, \dots\} \\
-\text{mlp} & \text{if } arch \in \{\text{mlp\_wide}, \text{mlp\_deep}, \dots\} \\
-arch & \text{otherwise}
+\mathrm{cnn} & \mathrm{if}\ arch \in \{\mathrm{cnn\_small}, \mathrm{cnn\_deep}, \dots\} \\
+\mathrm{mlp} & \mathrm{if}\ arch \in \{\mathrm{mlp\_wide}, \mathrm{mlp\_deep}, \dots\} \\
+arch & \mathrm{otherwise}
 \end{cases}
 $$
 
@@ -1382,7 +1382,7 @@ $$
 Example:
 
 $$
-\rho(\text{accuracy}) = \text{acc\_v1}
+\rho(\mathrm{accuracy}) = \mathrm{acc\_v1}
 $$
 
 This allows **multiple evaluations to coexist** in a single experiment **without collision**.
