@@ -184,7 +184,7 @@ This approach mirrors how SQL abstracts away query execution—SyntraLine++ abst
 ### ⭐️ **3.3. Core Ideas Behind SyntraLine++**
 SyntraLine++ is built upon five foundational ideas and implementations, as shown below:
 
-#### **3.3.1. Declarative Pipeline Specification**
+#### ☕️ **3.3.1. Declarative Pipeline Specification**
 Instead of writing wrappers around PyTorch training loops, users write concise DSL programs:
 
 ```syntra
@@ -203,7 +203,7 @@ experiment cnn_mnist(mnist) -> Metrics {
 ```
 The program describes **intent**, while the compiler determines the **implementation**.
 
-#### **3.3.2. Declarative Pipeline Specification**
+#### 🍟 **3.3.2. Declarative Pipeline Specification**
 Every `.syntra` file is parsed into an IR describing:
 - Dataset declarations
 - Model architectures and hyperparameters
@@ -217,7 +217,7 @@ In which, the IR enables:
 - Backend-agnostic transformations
 - Custom experiment handling (hypergrid, versioning)
 
-#### **3.3.3. Static Semantic Validation**
+#### 🌡️ **3.3.3. Static Semantic Validation**
 Before any backend script is generated, the compiler ensures:
 - Datasets referenced in experiments exist
 - Models used in `train()` or `evaluate()` exist
@@ -227,7 +227,7 @@ Before any backend script is generated, the compiler ensures:
 
 Errors become **compile-time failures**, not runtime crashes.
 
-#### **3.3.4. Backend-Agnostic Code Generation**
+#### 🚴🏻‍♂️ **3.3.4. Backend-Agnostic Code Generation**
 The same `.syntra` code can primarily produce:
 - **PyTorch execution files** using `--emit-pytorch`
 - **JAX execution files** using `--emit-jax`
@@ -242,7 +242,7 @@ These generated scripts simultaneously includes:
 
 In which, backend differences are handled by the compiler and not the user.
 
-#### **3.3.5. Fully Generated Execution Scripts**
+#### 💬 **3.3.5. Fully Generated Execution Scripts**
 SyntraLine++ outputs self-contained Python scripts such as:
 
 ```bash
@@ -267,17 +267,17 @@ This turns every `.syntra` file into a **reproducible artifact**.
 ### 🖋️ **3.4. Contribution**
 SyntraLine++ introduces several contributions to machine learning (ML) based tooling, such as:
 
-#### **3.4.1. Contribution 1 – Unified DSL for ML Pipelines**
+#### 🐥 **3.4.1. Contribution 1 – Unified DSL for ML Pipelines**
 A concise language to express datasets, models, training, evaluating, metrics, experiment results, and pipeline logic.
 
-#### **3.4.2. Contribution 2 — Architecture Normalization**
+#### 🐯 **3.4.2. Contribution 2 — Architecture Normalization**
 The compiler recognizes architecture families:
 - `cnn_small`, `cnn_deep`, `cnn_grid`, `cnn_eval`, `cnn_v1` → **cnn**
 - `mlp_flat`, `mlp_deep`, `mlp_mnist` → **mlp**
 
 while preserving variant-specific hyperparameters.
 
-#### **3.4.3. Contribution 3 — Automatic Dataset Handling**
+#### 🦄 **3.4.3. Contribution 3 — Automatic Dataset Handling**
 Generated Python includes:
 - Real CSV MNIST loaders
 - Random-data fallback
@@ -286,7 +286,7 @@ Generated Python includes:
 
 No dataset boilerplate is needed.
 
-#### **3.4.4. Contribution 4 — Versioned Experiment Semantics**
+#### 🧯 **3.4.4. Contribution 4 — Versioned Experiment Semantics**
 Experiments likewise shown below:
 ```syntra
 experiment compare_versions(mnist_v1) -> Metrics { ... }
@@ -297,7 +297,7 @@ cause the compiler to generate:
 - Independent evaluation loops
 - Result mapping (`acc_v1`, `acc_v2`, `loss_v1`, `loss_v2`)
 
-#### **3.4.5. Contribution 5 — Hypergrid Experiments**
+#### 💰 **3.4.5. Contribution 5 — Hypergrid Experiments**
 Multiple model definitions in a `.syntra` file define a search grid:
 - Different learning rates
 - Different batch sizes
@@ -305,21 +305,21 @@ Multiple model definitions in a `.syntra` file define a search grid:
 
 The compiler emits independent experiment runners per grid point.
 
-#### **3.4.6. Contribution 6 — Dual Backend Support**
+#### 🐹 **3.4.6. Contribution 6 — Dual Backend Support**
 Every experiment can run on:
 - PyTorch
 - JAX
 
 with identical semantics.
 
-#### **3.4.7. Contribution 7 — Compiler-Level IR + Validation**
+#### ⚜️ **3.4.7. Contribution 7 — Compiler-Level IR + Validation**
 The IR enables:
 - Symbol checking
 - Model/dataset consistency
 - Experiment structure validation
 - More predictable pipelines than Python scripts
 
-#### **3.4.8. Contribution 8 — Extensibility**
+#### 🛼 **3.4.8. Contribution 8 — Extensibility**
 SyntraLine++ is built to support future additions:
 - Distributed execution (DDP, TPU strategies)
 - Mixed precision training
@@ -839,7 +839,7 @@ This makes the SyntraLine++ compiler suitable for the following purposes:
 
 ---
 
-### 🧼 **5.8 Cleaning and Rebuilding**
+### 🧼 **5.8. Cleaning and Rebuilding**
 To clean the build:
 ```bash
 rm -rf build
@@ -1251,6 +1251,7 @@ Each component is declared independently in the DSL, but **linked by name resolu
 
 ### 🍋 **8.2. Dataset Formalization**
 Each dataset declaration is modeled as a **tuple**:
+
 $$
 d = (name_d, \mathcal{F}_d)
 $$
@@ -1260,12 +1261,14 @@ where:
 - $\mathcal{F}_d = \{ (k, v) \mid k \in \text{FieldNames}, v \in \text{Expr} \}$ is a finite map of **named fields**
 
 After semantic normalization, each dataset induces a **resolved dataset configuration**:
+
 $$
 \widehat{d} =
 (\text{source}_{train}, \text{source}_{test}, \text{batch}, \text{shuffle})
 $$
 
 with defaulting and derivation rules such as:
+
 $$
 \text{source}_{test} =
 \begin{cases}
@@ -1280,6 +1283,7 @@ This normalized dataset is later interpreted as a **data loader constructor** in
 
 ### 🫐 **8.3. Model Formalization**
 Each **model declaration** is represented as:
+
 $$
 m = (name_m, arch_m, \mathcal{H}_m)
 $$
@@ -1290,6 +1294,7 @@ where:
 - $\mathcal{H}_m$ is a finite set of **hyperparameters**
 
 After normalization, architecture families are **collapsed**:
+
 $$
 \text{normalize}(arch) =
 \begin{cases}
@@ -1300,6 +1305,7 @@ arch & \text{otherwise}
 $$
 
 Each normalized model declaration corresponds to a **model factory function**:
+
 $$
 \Phi_m : (\phi) \rightarrow (f_\theta, \text{optimizer}, T)
 $$
@@ -1313,22 +1319,26 @@ where:
 
 ### 🍒 **8.4. Experiment Pipeline Semantics**
 An experiment pipeline is defined as an **ordered sequence of operations**:
+
 $$
 e = (op_1, op_2, \dots, op_n)
 $$
 
 Each operation belongs to the set:
+
 $$
 op \in \{ \text{Train}, \text{Evaluate} \}
 $$
 
 #### 🍈 **8.4.1. Training Operation**
 A **training operation** is defined as:
+
 $$
 \text{Train}(m, d_{\text{train}})
 $$
 
 Semantically, this induces the **iterative update**:
+
 $$
 \theta_{t+1} = \theta_t - \eta \nabla_\theta \mathcal{L}(f_{\theta_t}(x), y)
 $$
@@ -1337,16 +1347,19 @@ for batches $(x, y) \sim d_{\text{train}}$ over $T$ epochs.
 
 #### 🍊 **8.4.2. Evaluation Operation**
 An **evaluation operation** is defined as:
+
 $$
 \text{Eval}(m, d_{\text{test}}) \rightarrow \mathcal{R}
 $$
 
 where:
+
 $$
 \mathcal{R} = \{ (\text{metric}_i, v_i) \}
 $$
 
 Standard metrics include:
+
 $$
 \text{accuracy} = \frac{1}{N} \sum_{i=1}^{N} \mathbf{1}[ \hat{y}_i = y_i ]
 $$
@@ -1361,11 +1374,13 @@ $$
 
 ### 🥝 **8.5. Result Mapping Semantics**
 Each experiment defines a **result projection**:
+
 $$
 \rho : \text{Metrics} \rightarrow \text{OutputFields}
 $$
 
 Example:
+
 $$
 \rho(\text{accuracy}) = \text{acc\_v1}
 $$
@@ -1376,11 +1391,13 @@ This allows **multiple evaluations to coexist** in a single experiment **without
 
 ### 🍐 **8.6. Version Comparison Semantics**
 The special `compare_versions` construct is modeled as **parallel pipelines**:
+
 $$
 e_{\text{compare}} = \{ e^{(1)}, e^{(2)}, \dots \}
 $$
 
 Each version pipeline is **executed independently**:
+
 $$
 \text{run}(e_{\text{compare}}) =
 \bigcup_{i} \text{run}(e^{(i)})
@@ -1392,12 +1409,14 @@ $$
 
 ### 🥥 **8.7. Intermediate Representation (IR) Mapping**
 Compilation proceeds by **lowering the AST into an IR**:
+
 $$
 \text{IR}(\mathcal{P}) =
 (\text{IRDataset}, \text{IRModel}, \text{IRExperiment})
 $$
 
 The IR is **backend-agnostic** and satisfies:
+
 $$
 \forall e \in E,\quad \text{IR}(e) \text{ is deterministic}
 $$
@@ -1406,6 +1425,7 @@ $$
 
 ### 🥭 **8.8. Backend Code Generation Semantics**
 Each backend defines a **mapping**:
+
 $$
 \text{codegen}_b : \text{IR} \rightarrow \text{Executable Script}
 $$
@@ -1413,6 +1433,7 @@ $$
 where $b \in \{ \text{PyTorch}, \text{JAX} \}$.
 
 The **overall execution semantics** are therefore:
+
 $$
 \boxed{
 \text{run}(e) =
@@ -1431,11 +1452,13 @@ This establishes **SyntraLine++** as a **true compiler**:
 
 ### 🍍 **8.9. Determinism and Reproducibility**
 Given **identical inputs**:
+
 $$
 (\mathcal{P}, \text{backend}, \text{data}, \text{seeds})
 $$
 
 the compilation pipeline satisfies:
+
 $$
 \text{codegen}_b(\text{IR}(\mathcal{P})) = \text{deterministic}
 $$
@@ -1455,6 +1478,7 @@ In effect, SyntraLine++ defines a *formal language for machine learning experime
 
 ## 🕹️ **9. Backend Implementation Specifications**
 SyntraLine++ is designed as a **multi-backend compiler**:
+
 $$
 \text{.syntra} \;\longrightarrow\; \text{Tokens} \;\longrightarrow\; \text{AST} \;\longrightarrow\; \text{Semantic Passes} \;\longrightarrow\; \text{IR} \;\longrightarrow\; \text{Backend Codegen} \;\longrightarrow\; \text{Runnable Script}
 $$
@@ -1521,6 +1545,7 @@ Then the experiment is validated if and only if the generated files are declarat
 
 ### 📻 **9.2. PyTorch Backend (`--emit-pytorch`)**
 The PyTorch backend is a **script-emitting compiler backend**:
+
 $$
 \text{codegen}_{torch} : \text{IR} \rightarrow \text{Python}(\text{torch})
 $$
@@ -1657,6 +1682,7 @@ Run:
 SYNTRA_PREFER_REAL_DATASETS=1 python3.11 build/run_compare.py
 ```
 Semantic meaning revolves around **two independent train/eval** executed cycles, producing a structured output:
+
 $$
 \{ acc_{v1}, loss_{v1}, acc_{v2}, loss_{v2} \}
 $$
@@ -1672,6 +1698,7 @@ The **JAX backend** is designed as a **fully functional execution backend** with
 - real dataset integration via the same environment flag
 
 Formally:
+
 $$
 \text{codegen}_{jax} : \text{IR} \rightarrow \text{Python}(\text{jax}, \text{optax})
 $$
@@ -1692,6 +1719,7 @@ The script supports:
 
 ##### 🍭 **9.3.1.3. JIT Compiled Per-batch Updates**
 **Train step** is typically:
+
 $$
 (\theta, s) \mapsto \theta’ \quad \rightarrow \quad
 \theta’ = \theta + \Delta(\nabla_\theta \mathcal{L})
@@ -1774,6 +1802,7 @@ SyntraLine++ maintains strong engineering invariants:
 - **Common runtime contract**
 
 Both the specified backends target:
+
 $$
 \operatorname{run\_experiment}_{\text{name}}() \rightarrow \text{metrics}
 $$
@@ -1923,6 +1952,7 @@ SyntraLine++ addresses these issues by enforcing that:
 - Experiments are **named, structured, and reproducible** by design.
 
 Formally, a SyntraLine++ experiment is a pure function of its source program and runtime data:
+
 $$
 \text{Result} = \text{Execute}(\text{Compile}(\text{Program}), \text{Dataset})
 $$
@@ -1955,6 +1985,7 @@ This enables:
   - **evaluation suites**
 
 **Composability is preserved** throughout the compiler pipeline:
+
 $$
 \text{DSL} \rightarrow \text{AST} \rightarrow \text{Semantic AST} \rightarrow \text{IR} \rightarrow \text{Backend Code}
 $$
@@ -2081,6 +2112,7 @@ A core requirement of SyntraLine++ is that **the same DSL program produces seman
 - Accuracy and loss values fall within expected variance ranges
 
 This validates the compiler’s design:
+
 $$
 \text{DSL} \rightarrow \ldots \rightarrow \text{IR} \rightarrow \ldots \rightarrow \text{Backend-Specific Code}
 $$
