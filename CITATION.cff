@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+title: "SyntraLine++: A Domain-Specific Language for Machine Learning Pipelines"
+authors:
+  - family-names: Saputra
+    given-names: Rizky Johan
+year: 2025
+license: MIT
+repository-code: https://github.com/rizkysaputradev/Syntralinepp-Compiler

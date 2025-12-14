@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "syntralinepp-runtime"
+version = "0.1.0"
+description = "Python runtime components for the SyntraLine++ compiler"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+
+dependencies = [
+  "numpy<2",
+  "scipy>=1.11",
+  "ml-dtypes>=0.4"
+]
+
+authors = [
+  { name = "Rizky Johan Saputra" }
+]
+
+[project.optional-dependencies]
+# Install with: pip install .[pytorch]
+pytorch = [
+  "torch",
+  "torchvision",
+  "torchaudio",
+]
+
+# Install with: pip install .[jax]
+jax = [
+  "jax",
+  "jaxlib",
+  "optax",
+]
+
+# Install with: pip install .[dev]
+dev = [
+  "black",
+  "ruff",
+  "mypy",
+  "pytest"
+]
+
+[tool.setuptools]
+package-dir = {"" = "runtime"}
+
+[tool.setuptools.packages.find]
+where = ["runtime"]
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+include = "\\.pyi?$"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+select = ["E", "F", "I"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra"
+testpaths = [
+  "tests",
+]

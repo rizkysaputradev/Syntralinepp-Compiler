@@ -1,0 +1,58 @@
+// examples/cnn_pipeline.syntra
+//
+// Simple CNN pipeline experiments for MNIST using two architectures:
+// - simple_cnn_small
+// - simple_cnn_deep
+
+dataset mnist: ImageDataset {
+    source   = "data/mnist_train.csv"
+    shape    = (28, 28)
+    channels = 1
+    batch    = 64
+    shuffle  = true
+    seed     = 42
+}
+
+model simple_cnn_small: TorchModel {
+    arch      = "cnn_small"
+    framework = "pytorch"
+    lr        = 1e-3
+    epochs    = 5
+    optimizer = "adam"
+}
+
+model simple_cnn_deep: TorchModel {
+    arch      = "cnn_deep"
+    framework = "pytorch"
+    lr        = 5e-4
+    epochs    = 10
+    optimizer = "adam"
+}
+
+// Baseline experiment with the small CNN
+experiment cnn_small_mnist(mnist) -> Metrics {
+    let train_run = train(simple_cnn_small, mnist.train)
+
+    let test_run  = evaluate(simple_cnn_small, mnist.test) with {
+        metrics = [accuracy, loss]
+    }
+
+    return {
+        accuracy = test_run.accuracy,
+        loss     = test_run.loss
+    }
+}
+
+// Experiment with the deeper CNN
+experiment cnn_deep_mnist(mnist) -> Metrics {
+    let train_run = train(simple_cnn_deep, mnist.train)
+
+    let test_run  = evaluate(simple_cnn_deep, mnist.test) with {
+        metrics = [accuracy, loss]
+    }
+
+    return {
+        accuracy = test_run.accuracy,
+        loss     = test_run.loss
+    }
+}

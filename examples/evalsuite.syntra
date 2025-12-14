@@ -1,0 +1,37 @@
+// examples/evalsuite.syntra
+//
+// Evaluation suite example: one model, but a richer metric list.
+// Backends may only implement accuracy/loss, but the language side
+// demonstrates how evaluation configs can be extended.
+
+dataset mnist_eval: ImageDataset {
+    source   = "data/mnist_train.csv" // mnist_eval.csv
+    shape    = (28, 28)
+    channels = 1
+    batch    = 128
+    shuffle  = true
+    seed     = 7
+}
+
+model eval_cnn: TorchModel {
+    arch      = "cnn_eval"
+    framework = "pytorch"
+    lr        = 1e-3
+    epochs    = 8
+    optimizer = "adam"
+}
+
+experiment evalsuite_mnist(mnist_eval) -> Metrics {
+    let train_run = train(eval_cnn, mnist_eval.train)
+
+    let test_run  = evaluate(eval_cnn, mnist_eval.test) with {
+        metrics = [accuracy, loss, precision, recall, f1]
+    }
+
+    // Backends currently map accuracy/loss directly; other metrics
+    // are placeholders for future extension.
+    return {
+        accuracy  = test_run.accuracy,
+        loss      = test_run.loss
+    }
+}

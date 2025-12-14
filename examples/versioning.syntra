@@ -1,0 +1,61 @@
+// examples/versioning.syntra
+//
+// Versioning example: compare v1 vs v2 of model and dataset.
+// We keep the syntax simple and reuse the standard train/evaluate pattern.
+
+dataset mnist_v1: ImageDataset {
+    source      = "data/mnist_train.csv" // mnist_v1.csv
+    test_source = "data/mnist_test.csv"
+    shape    = (28, 28)
+    channels = 1
+    batch    = 64
+    shuffle  = true
+    seed     = 11
+}
+
+dataset mnist_v2: ImageDataset {
+    source      = "data/mnist_train.csv" // mnist_v2.csv
+    test_source = "data/mnist_test.csv"
+    shape    = (28, 28)
+    channels = 1
+    batch    = 64
+    shuffle  = true
+    seed     = 22
+}
+
+model simple_cnn_v1: TorchModel {
+    arch      = "cnn_v1"
+    framework = "pytorch"
+    lr        = 1e-3
+    epochs    = 5
+    optimizer = "adam"
+}
+
+model simple_cnn_v2: TorchModel {
+    arch      = "cnn_v2"
+    framework = "pytorch"
+    lr        = 8e-4
+    epochs    = 8
+    optimizer = "adam"
+}
+
+experiment compare_versions(mnist_v1) -> Metrics {
+    // Train v1 on mnist_v1
+    let train_v1 = train(simple_cnn_v1, mnist_v1.train)
+    let test_v1  = evaluate(simple_cnn_v1, mnist_v1.test) with {
+        metrics = [accuracy, loss]
+    }
+
+    // Train v2 on mnist_v2
+    let train_v2 = train(simple_cnn_v2, mnist_v2.train)
+    let test_v2  = evaluate(simple_cnn_v2, mnist_v2.test) with {
+        metrics = [accuracy, loss]
+    }
+
+    return {
+        acc_v1 = test_v1.accuracy,
+        loss_v1 = test_v1.loss,
+        acc_v2 = test_v2.accuracy,
+        loss_v2 = test_v2.loss
+    }
+}

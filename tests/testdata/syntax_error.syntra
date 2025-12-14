@@ -1,0 +1,14 @@
+# tests/testdata/syntax_error.syntra
+#
+# Intentionally malformed SyntraLine++ program:
+# - Missing closing ')' in the shape tuple
+# - Missing closing '}' in the dataset block
+
+dataset broken : ImageDataset {
+    source   = "data/broken.csv"
+    shape    = (28, 28        # <-- missing ')'
+    channels = 1
+    batch    = 16
+    shuffle  = false
+    seed     = 99
+# no closing brace for the dataset block, should trigger a parse error

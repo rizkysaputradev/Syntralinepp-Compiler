@@ -1,0 +1,73 @@
+// examples/hypergrid_search.syntra
+//
+// Conceptual "hypergrid search" example.
+// Instead of introducing new syntax, we encode the grid in the model
+// definitions: different learning rates and batch sizes.
+
+dataset mnist_grid: ImageDataset {
+    source   = "data/mnist_train.csv"
+    shape    = (28, 28)
+    channels = 1
+    batch    = 64          // default batch; some models override internally
+    shuffle  = true
+    seed     = 123
+}
+
+// Same architecture, different learning rates.
+model cnn_lr_1e3: TorchModel {
+    arch      = "cnn_grid"
+    framework = "pytorch"
+    lr        = 1e-3
+    epochs    = 5
+    optimizer = "adam"
+}
+
+model cnn_lr_5e4: TorchModel {
+    arch      = "cnn_grid"
+    framework = "pytorch"
+    lr        = 5e-4
+    epochs    = 5
+    optimizer = "adam"
+}
+
+model cnn_lr_1e4: TorchModel {
+    arch      = "cnn_grid"
+    framework = "pytorch"
+    lr        = 1e-4
+    epochs    = 5
+    optimizer = "adam"
+}
+
+// Each experiment represents one point in the "hyperparameter grid".
+experiment grid_lr_1e3(mnist_grid) -> Metrics {
+    let train_run = train(cnn_lr_1e3, mnist_grid.train)
+    let test_run  = evaluate(cnn_lr_1e3, mnist_grid.test) with {
+        metrics = [accuracy, loss]
+    }
+    return {
+        accuracy = test_run.accuracy,
+        loss     = test_run.loss
+    }
+}
+
+experiment grid_lr_5e4(mnist_grid) -> Metrics {
+    let train_run = train(cnn_lr_5e4, mnist_grid.train)
+    let test_run  = evaluate(cnn_lr_5e4, mnist_grid.test) with {
+        metrics = [accuracy, loss]
+    }
+    return {
+        accuracy = test_run.accuracy,
+        loss     = test_run.loss
+    }
+}
+
+experiment grid_lr_1e4(mnist_grid) -> Metrics {
+    let train_run = train(cnn_lr_1e4, mnist_grid.train)
+    let test_run  = evaluate(cnn_lr_1e4, mnist_grid.test) with {
+        metrics = [accuracy, loss]
+    }
+    return {
+        accuracy = test_run.accuracy,
+        loss     = test_run.loss
+    }
+}

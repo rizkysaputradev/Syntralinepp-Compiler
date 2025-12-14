@@ -1,0 +1,21 @@
+# SyntraLine++ runtime dependencies
+# Use this inside .syntra-venv:
+#   (.syntra-venv) pip install -r requirements-runtime.txt
+
+# Core numeric stack
+numpy<2 # alternative: numpy>=1.26 (change version to ensure csv can be generated via make_mnist_csv.py)
+scipy>=1.11
+ml-dtypes>=0.4
+
+# PyTorch (CPU-only is fine on macOS; pip chooses the right wheel)
+torch
+torchvision
+torchaudio
+
+# JAX (CPU-only)
+jax
+jaxlib
+optax
+
+# Testing
+pytest

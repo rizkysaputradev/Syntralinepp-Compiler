@@ -1,0 +1,88 @@
+# ============================================================================
+# SyntraLine++ Project Configuration
+# ============================================================================
+# This file centralizes runtime configuration for the SyntraLine++ compiler
+# and its Python backends (PyTorch + JAX).
+#
+# It is intentionally simple YAML so that:
+#   - shell scripts can parse it if needed
+#   - future C++ config loader (syntra::Config) can read it
+#   - IDEs / tools can inspect defaults in one place
+# ============================================================================
+
+# ---------------------------------------------------------------------------
+# Python / virtual environment
+# ---------------------------------------------------------------------------
+
+python:
+  # Path to the virtual environment used for SyntraLine++ runtime tests
+  # and generated scripts.
+  venv_path: ".syntra-venv"
+
+  # Preferred interpreter inside that venv.
+  # On macOS this is explicitly 3.11 for JAX compatibility.
+  interpreter: "python3.11"
+
+# ---------------------------------------------------------------------------
+# Backends & modes
+# ---------------------------------------------------------------------------
+
+backend:
+  # Default mode if user calls `syntra` with no explicit backend flag.
+  # Allowed values (for now): "simulate", "pytorch", "jax"
+  default: "simulate"
+
+  # Default experiment name if the user does not pass one. If empty, the
+  # first experiment in the module is used.
+  default_experiment: ""
+
+  # Whether to emit both backends when using convenience scripts in future.
+  emit_both_on_examples: true
+
+# ---------------------------------------------------------------------------
+# Runtime Python packages
+# ---------------------------------------------------------------------------
+
+runtime:
+  # Import path for the PyTorch runtime adapter.
+  # This should match the package structure under `runtime/`.
+  pytorch_module: "runtime.pytorch.syntra_pytorch_runtime"
+
+  # Import path for the JAX runtime adapter.
+  jax_module: "runtime.jax.syntra_jax_runtime"
+
+  # Default metrics that both runtimes will use if no explicit metrics
+  # are provided by the IR / experiment spec.
+  default_metrics:
+    - "accuracy"
+    - "loss"
+
+# ---------------------------------------------------------------------------
+# Data / file layout
+# ---------------------------------------------------------------------------
+
+data:
+  # Root folder from which dataset `source` paths in .syntra files are resolved.
+  # For now, your examples mostly use relative CSV paths, but this is useful
+  # once you mount real datasets.
+  root: "data"
+
+  # Default synthetic dataset size used by runtime stubs when there is
+  # no real data available.
+  synthetic:
+    train_size: 1000
+    test_size: 200
+    num_classes: 10
+
+# ---------------------------------------------------------------------------
+# Logging / diagnostics
+# ---------------------------------------------------------------------------
+
+logging:
+  # Verbosity level for future CLI output: "silent", "normal", "verbose".
+  verbosity: "normal"
+
+  # Whether to show colored diagnostics in the CLI (future extension).
+  color: true
+
+# End of .syntra-config.yaml

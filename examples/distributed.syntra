@@ -1,0 +1,41 @@
+// examples/distributed.syntra
+//
+// Conceptual distributed training example.
+// We annotate dataset/model with fields like world_size, backend,
+// but keep the core syntax within existing SyntraLine++ features.
+
+dataset mnist_sharded: ImageDataset {
+    source     = "data/mnist_train.csv"
+    shape      = (28, 28)
+    channels   = 1
+    batch      = 128
+    shuffle    = true
+    seed       = 2025
+    // Conceptual hint fields (currently unused by IR/runtime):
+    world_size = 4
+    backend    = "nccl"
+}
+
+model dist_cnn: TorchModel {
+    arch        = "cnn_distributed"
+    framework   = "pytorch"
+    lr          = 1e-3
+    epochs      = 5
+    optimizer   = "adam"
+    // Conceptual hints
+    ddp_enabled = true
+    grad_accum  = 2
+}
+
+experiment distributed_mnist(mnist_sharded) -> Metrics {
+    let train_run = train(dist_cnn, mnist_sharded.train)
+
+    let test_run  = evaluate(dist_cnn, mnist_sharded.test) with {
+        metrics = [accuracy, loss]
+    }
+
+    return {
+        accuracy = test_run.accuracy,
+        loss     = test_run.loss
+    }
+}

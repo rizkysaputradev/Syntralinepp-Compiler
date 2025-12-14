@@ -1,0 +1,66 @@
+dataset mnist: ImageDataset {
+    source   = "data/mnist_train.csv"
+    shape    = (28, 28)
+    channels = 1
+    batch    = 64
+    shuffle  = true
+    seed     = 42
+}
+
+dataset mnist_flat: ImageDataset {
+    source   = "data/mnist_train.csv"
+    shape    = (28, 28)
+    channels = 1
+    batch    = 64
+    shuffle  = true
+    seed     = 123
+}
+
+model simple_cnn: TorchModel {
+    arch        = "cnn"
+    framework   = "pytorch"
+    in_channels = 1
+    num_classes = 10
+    lr          = 1e-3
+    epochs      = 10
+    optimizer   = "adam"
+}
+
+model mnist_mlp: TorchModel {
+    arch        = "mlp"
+    framework   = "pytorch"
+    input_dim   = 784
+    num_classes = 10
+    hidden_dim  = 256
+    mlp_layers  = 3
+    dropout     = 0.1
+    lr          = 1e-3
+    epochs      = 10
+    optimizer   = "adamw"
+}
+
+experiment cnn_mnist(mnist) -> Metrics {
+    let train_run = train(simple_cnn, mnist.train)
+
+    let test_run  = evaluate(simple_cnn, mnist.test) with {
+        metrics = [accuracy, loss]
+    }
+
+    return {
+        accuracy = test_run.accuracy,
+        loss     = test_run.loss
+    }
+}
+
+experiment mlp_mnist(mnist_flat) -> Metrics {
+    let train_run = train(mnist_mlp, mnist_flat.train)
+
+    let test_run  = evaluate(mnist_mlp, mnist_flat.test) with {
+        metrics = [accuracy, loss]
+    }
+
+    return {
+        accuracy = test_run.accuracy,
+        loss     = test_run.loss
+    }
+}
