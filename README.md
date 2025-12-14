@@ -1804,7 +1804,7 @@ SyntraLine++ maintains strong engineering invariants:
 Both the specified backends target:
 
 $$
-\operatorname{run\_experiment}_{\text{name}}() \rightarrow \text{metrics}
+\text{run\_experiment}_{\text{name}}() \rightarrow \text{metrics}
 $$
 
 ---
