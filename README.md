@@ -336,7 +336,7 @@ SyntraLine++ elevates ML experimentation from scattered Python scripts into a **
 ## 🎄 **4. Project Structure**
 SyntraLine++ is organized as a full compiler toolchain consisting of a front-end (AST + parser), a semantic analyzer, an Intermediate Representation (IR) layer, and backend code generators for PyTorch and JAX. The repository is structured to separate concerns cleanly and to mirror the architecture of modern compilers such as Clang/LLVM—while remaining lightweight and focused on ML pipeline construction. Below is the full directory structure, followed by an in-depth explanation of each component.
 ```graphql
-syntralinepp/
+Syntralinepp-Compiler/
 │
 ├── include/
 │   ├── syntra/ast.hpp
